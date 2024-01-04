@@ -52,39 +52,6 @@ function Window.get_user_windows()
 	return user_windows
 end
 
-local function get_leftmost_and_rightmost_windows()
-	-- todo fix all of this
-	local leftmost_window = nil
-	local rightmost_window = nil
-
-	-- lol
-	local leftmost_col = 9999999999
-	local rightmost_col = -1
-
-	for _, window in ipairs(vim.api.nvim_list_wins()) do
-		local buf = vim.api.nvim_win_get_buf(window)
-		local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
-		local relative = vim.api.nvim_win_get_config(window).relative
-
-		if (buftype == "" or buftype == "terminal") and relative == "" then
-			local window_position = vim.api.nvim_win_get_position(window)
-			local col = window_position[2]
-
-			if col < leftmost_col then
-				leftmost_window = window
-				leftmost_col = col
-			end
-
-			if col > rightmost_col then
-				rightmost_window = window
-				rightmost_col = col
-			end
-		end
-	end
-
-	return leftmost_window, rightmost_window
-end
-
 local function create_pad_window(starting_window, create_cmd)
 	-- Enter the leftmost or rightmost window before running the split commands
 	if starting_window and vim.api.nvim_win_is_valid(starting_window) then
